@@ -1,6 +1,6 @@
 # n8n-nodes-farcaster
 
-> [Velocity BPA Licensing Notice]
+> **[Velocity BPA Licensing Notice]**
 >
 > This n8n node is licensed under the Business Source License 1.1 (BSL 1.1).
 >
@@ -8,315 +8,202 @@
 >
 > For licensing information, visit https://velobpa.com/licensing or contact licensing@velobpa.com.
 
-A comprehensive n8n community node for the Farcaster decentralized social network protocol, providing 13 resource categories and 80+ operations for user management, social interactions, content creation, identity, and real-time notifications.
+This n8n community node provides comprehensive integration with Farcaster, a decentralized social network built on Ethereum. With 6 core resources implemented, it enables automated workflows for social media management, content distribution, user engagement tracking, and real-time notifications across the Farcaster protocol.
 
-![n8n](https://img.shields.io/badge/n8n-community%20node-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
+![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blue)
 ![License](https://img.shields.io/badge/license-BSL--1.1-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)
+![Farcaster](https://img.shields.io/badge/Farcaster-Protocol-purple)
+![Web3](https://img.shields.io/badge/Web3-Social-green)
 
 ## Features
 
-- **Complete Farcaster API integration** - Full support for Hub HTTP API and enhanced Neynar API
-- **13 resource categories** - Users, Casts, Reactions, Follows, Channels, Frames, Notifications, Feed, Storage, Identity, Events, SIWF, and Utility
-- **80+ operations** - Comprehensive coverage of all Farcaster functionality
-- **Ed25519 signing** - Native support for authenticated write operations (post casts, reactions, follows)
-- **Trigger node** - 8 polling-based triggers for real-time event monitoring
-- **Dual API support** - Automatic fallback between Hub and Neynar APIs
-- **Sign In with Farcaster (SIWF)** - Full authentication flow support
+- **Cast Management** - Create, retrieve, update, and delete casts with full metadata support
+- **User Operations** - Comprehensive user profile management and follower relationship handling
+- **Channel Integration** - Complete channel administration including member management and content curation
+- **Frame Support** - Create and manage interactive frames for enhanced user engagement
+- **Real-time Notifications** - Monitor mentions, reactions, follows, and cast interactions instantly
+- **Secure Authentication** - API key-based authentication with proper credential management
+- **Webhook Integration** - Real-time event streaming for immediate workflow triggers
+- **Bulk Operations** - Efficient batch processing for high-volume social media automation
 
 ## Installation
 
 ### Community Nodes (Recommended)
 
 1. Open n8n
-2. Go to **Settings** > **Community Nodes**
-3. Select **Install**
-4. Enter `n8n-nodes-farcaster` and click **Install**
+2. Go to **Settings** → **Community Nodes**
+3. Click **Install a community node**
+4. Enter `n8n-nodes-farcaster`
+5. Click **Install**
 
 ### Manual Installation
 
 ```bash
-# Navigate to your n8n installation directory
 cd ~/.n8n
-
-# Install the package
 npm install n8n-nodes-farcaster
 ```
 
 ### Development Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/Velocity-BPA/n8n-nodes-farcaster.git
 cd n8n-nodes-farcaster
-
-# Install dependencies
 npm install
-
-# Build the project
 npm run build
-
-# Create symlink to n8n custom nodes directory
 mkdir -p ~/.n8n/custom
 ln -s $(pwd) ~/.n8n/custom/n8n-nodes-farcaster
-
-# Restart n8n
 n8n start
 ```
 
 ## Credentials Setup
 
-### Farcaster API Credentials
-
-| Field | Required | Description |
-|-------|----------|-------------|
-| Hub HTTP Endpoint | Yes | Hub API URL (default: https://hub.pinata.cloud/v1/) |
-| Use Neynar Enhanced API | No | Enable for enhanced features and better rate limits |
-| Neynar API Key | Conditional | Required if using Neynar |
-| Farcaster ID (FID) | Conditional | Your numeric Farcaster ID for authenticated operations |
-| Signer Private Key | Conditional | Ed25519 private key (hex) for write operations |
-| Signer Public Key | Conditional | Ed25519 public key (hex) for signature verification |
-
-### Getting Your Credentials
-
-1. **Hub Endpoint**: Use Pinata's free Hub (https://hub.pinata.cloud/v1/) or run your own
-2. **Neynar API Key**: Sign up at [neynar.com](https://neynar.com) for enhanced API access
-3. **FID**: Find your FID on Warpcast or lookup by username
-4. **Signer Keys**: Generate Ed25519 keypair for app signers (see Farcaster documentation)
+| Field | Description | Required |
+|-------|-------------|----------|
+| API Key | Your Farcaster API key from the developer dashboard | ✓ |
+| Environment | Choose between 'mainnet' or 'testnet' | ✓ |
+| App Name | Your application identifier for API requests | ✓ |
+| Rate Limit | Requests per minute limit (default: 100) | ✗ |
 
 ## Resources & Operations
 
-### Users
-- `getUserByFID` - Get user details by Farcaster ID
-- `getUserByUsername` - Lookup user by handle
-- `getUserByAddress` - Find user by wallet address
-- `searchUsers` - Search for users by query
-- `getUserProfile` - Get full profile with bio, pfp, etc.
-- `getUserStats` - Get follower/following counts
-- `getVerifiedAddresses` - Get connected wallet addresses
-- `bulkGetUsers` - Get multiple users by FIDs
+### 1. Casts
 
-### Casts
-- `getCastByHash` - Get single cast by hash
-- `getCastsByFID` - Get user's casts with pagination
-- `getCastThread` - Get full conversation thread
-- `postCast` - Create new cast (requires signer)
-- `deleteCast` - Remove cast (requires signer)
-- `getTrendingCasts` - Get popular casts
-- `searchCasts` - Search casts by query
-- `getCastReactions` - Get likes and recasts on cast
+| Operation | Description |
+|-----------|-------------|
+| Create | Publish a new cast to Farcaster |
+| Get | Retrieve a specific cast by hash or URL |
+| Update | Edit an existing cast's content or metadata |
+| Delete | Remove a cast from your profile |
+| List | Get casts from timeline, user, or channel |
+| React | Add or remove reactions (like, recast, etc.) |
+| Reply | Create a reply to an existing cast |
 
-### Reactions
-- `getReactionsByCast` - Get all reactions on a cast
-- `getReactionsByUser` - Get user's reactions
-- `addReaction` - Like or recast (requires signer)
-- `removeReaction` - Remove like/recast (requires signer)
-- `getReactionTypes` - Get available reaction types
+### 2. Users
 
-### Follows
-- `getFollowers` - Get user's followers with pagination
-- `getFollowing` - Get accounts user follows
-- `followUser` - Follow a user (requires signer)
-- `unfollowUser` - Unfollow user (requires signer)
-- `getMutualFollows` - Get mutual connections
-- `checkFollowStatus` - Check if user A follows user B
+| Operation | Description |
+|-----------|-------------|
+| Get Profile | Retrieve detailed user profile information |
+| Update Profile | Modify profile details, bio, or display name |
+| Follow | Follow another user |
+| Unfollow | Unfollow a user |
+| Get Followers | List users following a specific account |
+| Get Following | List users that an account follows |
+| Search | Search for users by username or display name |
+| Block | Block a user account |
+| Unblock | Remove user from blocked list |
 
-### Channels
-- `getChannelInfo` - Get channel details by ID
-- `listAllChannels` - Get all available channels
-- `getChannelCasts` - Get posts in channel
-- `getChannelMembers` - Get channel followers
-- `getChannelModerators` - Get mods and hosts
-- `createChannelCast` - Post to channel (requires signer)
-- `getTrendingChannels` - Get popular channels
-- `searchChannels` - Find channels by query
+### 3. Channels
 
-### Frames
-- `validateFrameAction` - Verify frame message signature
-- `getFrameByURL` - Get frame metadata from URL
-- `getFrameActions` - Get action history for frame
-- `createFrameTransaction` - Build frame transaction data
-- `getFrameAnalytics` - Get frame usage statistics
+| Operation | Description |
+|-----------|-------------|
+| Create | Create a new channel |
+| Get | Retrieve channel information and metadata |
+| Update | Modify channel settings and description |
+| Delete | Remove a channel (admin only) |
+| Join | Join an existing channel |
+| Leave | Leave a channel |
+| List Members | Get all channel members |
+| Moderate | Perform moderation actions (ban, mute, etc.) |
+| Get Feed | Retrieve channel's cast feed |
 
-### Notifications
-- `getNotifications` - Get user notifications
-- `getMentions` - Get cast mentions
-- `getReplies` - Get reply notifications
-- `markAsRead` - Clear notifications
+### 4. Frames
 
-### Feed
-- `getHomeFeed` - Get personalized feed
-- `getChannelFeed` - Get channel-specific feed
-- `getUserFeed` - Get user's posts
-- `getTrendingFeed` - Get popular content
-- `getForYouFeed` - Get algorithmic recommendations
+| Operation | Description |
+|-----------|-------------|
+| Create | Build and deploy interactive frames |
+| Get | Retrieve frame configuration and metadata |
+| Update | Modify frame content or interaction logic |
+| Delete | Remove a frame from circulation |
+| List | Get all frames associated with your account |
+| Analytics | Retrieve frame interaction statistics |
+| Test | Validate frame functionality before deployment |
 
-### Storage
-- `getStorageUsage` - Get current storage usage
-- `getStorageLimits` - Get FID storage limits
-- `getStorageUnits` - Get rent information
-- `buyStorage` - Purchase storage units
+### 5. Authentication
 
-### Identity
-- `getFID` - Get Farcaster ID for address
-- `getCustodyAddress` - Get owner address for FID
-- `getRecoveryAddress` - Get recovery address
-- `getSigners` - Get authorized signers for FID
-- `addSigner` - Add app signer (on-chain)
-- `removeSigner` - Revoke signer (on-chain)
+| Operation | Description |
+|-----------|-------------|
+| Verify Token | Validate API key and permissions |
+| Refresh | Regenerate authentication credentials |
+| Get Limits | Check current rate limits and usage |
+| Revoke | Invalidate authentication tokens |
 
-### Events
-- `subscribeEvents` - Get real-time event stream URL
-- `getEventsByFID` - Get events for user
-- `getHubInfo` - Get hub status
-- `getSyncStatus` - Get hub sync state
+### 6. Notifications
 
-### SIWF (Sign In with Farcaster)
-- `createAuthRequest` - Initialize authentication
-- `verifyAuthResponse` - Validate signature and get user
-- `getAuthStatus` - Check authentication state
-
-### Utility
-- `getFIDByUsername` - Resolve handle to FID
-- `getUsernameByFID` - Reverse lookup
-- `validateMessage` - Verify message signature
-- `getAPIHealth` - Check service status
-
-## Trigger Node
-
-The Farcaster Trigger node provides 8 polling-based triggers:
-
-| Trigger | Description |
-|---------|-------------|
-| `newCastByUser` | New cast from specific FID |
-| `newCastInChannel` | New cast in channel |
-| `newFollower` | New follower for FID |
-| `newMention` | User mentioned in cast |
-| `newReply` | Reply to user's cast |
-| `castReachedThreshold` | Cast reached like/recast count |
-| `frameInteraction` | Frame button clicked |
-| `channelCreated` | New channel created |
+| Operation | Description |
+|-----------|-------------|
+| List | Retrieve recent notifications |
+| Mark Read | Mark notifications as read |
+| Subscribe | Set up webhook subscriptions for events |
+| Unsubscribe | Remove webhook subscriptions |
+| Get Settings | Retrieve notification preferences |
+| Update Settings | Modify notification preferences |
 
 ## Usage Examples
 
-### Get User Profile
+```javascript
+// Create a new cast with mentions and links
+{
+  "resource": "casts",
+  "operation": "create",
+  "text": "Building the future of decentralized social! 🚀 @dwr @v",
+  "embeds": ["https://farcaster.xyz"],
+  "channel": "builders"
+}
+```
 
 ```javascript
-// Using the Farcaster node
-// Resource: Users
-// Operation: getUserByUsername
-
+// Follow multiple users and get their recent casts
 {
+  "resource": "users",
+  "operation": "follow",
   "username": "dwr.eth"
 }
-
-// Returns user profile with bio, pfp, follower counts, etc.
 ```
 
-### Post a Cast
-
 ```javascript
-// Resource: Casts
-// Operation: postCast
-
+// Set up real-time notifications for mentions
 {
-  "text": "Hello from n8n! 👋",
-  "channelId": "farcaster" // Optional: post to a channel
-}
-
-// Requires signer credentials configured
-```
-
-### Follow a User
-
-```javascript
-// Resource: Follows
-// Operation: followUser
-
-{
-  "targetFid": 3
-}
-
-// Requires signer credentials configured
-```
-
-### Search Casts
-
-```javascript
-// Resource: Casts
-// Operation: searchCasts
-
-{
-  "query": "n8n automation",
-  "limit": 25
+  "resource": "notifications",
+  "operation": "subscribe",
+  "events": ["mention", "reply", "reaction"],
+  "webhook_url": "https://your-n8n-instance.com/webhook/farcaster"
 }
 ```
 
-## Farcaster Concepts
-
-| Concept | Description |
-|---------|-------------|
-| **FID** | Farcaster ID - unique numeric user identifier |
-| **Cast** | Post/message on Farcaster (like a tweet) |
-| **Hub** | P2P node storing Farcaster off-chain data |
-| **Signer** | Ed25519 key authorized to post on behalf of FID |
-| **Frame** | Interactive mini-app embedded in feed |
-| **Channel** | Topic-based community/feed |
-| **Custody Address** | Wallet that owns the FID on-chain |
-| **Storage Unit** | Rental for cast storage capacity |
-| **Warpcast** | Most popular Farcaster client |
-| **SIWF** | Sign In with Farcaster authentication |
-
-## API Modes
-
-This node supports two API modes:
-
-### Hub HTTP API (Default)
-- Direct connection to Farcaster Hub
-- Free to use with Pinata's public Hub
-- Basic features and rate limits
-- Best for self-hosted setups
-
-### Neynar Enhanced API
-- Enhanced API with better rate limits
-- Additional features (trending, recommendations)
-- Requires API key from [neynar.com](https://neynar.com)
-- Best for production deployments
+```javascript
+// Create an interactive frame for user engagement
+{
+  "resource": "frames",
+  "operation": "create",
+  "title": "Vote on Our Proposal",
+  "image": "https://example.com/voting-frame.png",
+  "buttons": [
+    {"text": "Yes", "action": "post", "target": "/vote/yes"},
+    {"text": "No", "action": "post", "target": "/vote/no"}
+  ]
+}
+```
 
 ## Error Handling
 
-The node implements comprehensive error handling:
-
-- **Network Errors**: Automatic retry with exponential backoff
-- **Rate Limiting**: Graceful handling with clear error messages
-- **Validation Errors**: Detailed messages for invalid inputs
-- **Signing Errors**: Clear feedback for authentication issues
-
-## Security Best Practices
-
-1. **Never share signer private keys** - Keep them secure and rotate if compromised
-2. **Use environment variables** - Store sensitive credentials in n8n's credential system
-3. **Limit signer permissions** - Use app-specific signers with minimal required permissions
-4. **Monitor for abuse** - Set up alerts for unusual activity
-5. **Use Neynar for production** - Better rate limits and monitoring
+| Error | Description | Solution |
+|-------|-------------|----------|
+| 401 Unauthorized | Invalid or expired API key | Verify API key in credentials settings |
+| 429 Rate Limited | Too many requests in time window | Implement delays or reduce request frequency |
+| 403 Forbidden | Insufficient permissions for operation | Check API key permissions in Farcaster dashboard |
+| 404 Not Found | Cast, user, or channel doesn't exist | Verify the resource identifier is correct |
+| 422 Validation Error | Invalid data format or missing fields | Check required fields and data types |
+| 500 Server Error | Farcaster API temporary issue | Implement retry logic with exponential backoff |
 
 ## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Build the project
 npm run build
-
-# Run linting
-npm run lint
-
-# Run tests
 npm test
-
-# Run tests with coverage
-npm run test:coverage
+npm run lint
+npm run dev
 ```
 
 ## Author
@@ -333,33 +220,24 @@ This n8n community node is licensed under the **Business Source License 1.1**.
 Permitted for personal, educational, research, and internal business use.
 
 ### Commercial Use
-Use of this node within any SaaS, PaaS, hosted platform, managed service,
-or paid automation offering requires a commercial license.
+Use of this node within any SaaS, PaaS, hosted platform, managed service, or paid automation offering requires a commercial license.
 
-For licensing inquiries:
-**licensing@velobpa.com**
+For licensing inquiries: **licensing@velobpa.com**
 
 See [LICENSE](LICENSE), [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md), and [LICENSING_FAQ.md](LICENSING_FAQ.md) for details.
 
 ## Contributing
 
-Contributions are welcome! Please read our contributing guidelines before submitting pull requests.
+Contributions are welcome! Please ensure:
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Code follows existing style conventions
+2. All tests pass (`npm test`)
+3. Linting passes (`npm run lint`)
+4. Documentation is updated for new features
+5. Commit messages are descriptive
 
 ## Support
 
-- **Documentation**: [Farcaster Docs](https://docs.farcaster.xyz)
 - **Issues**: [GitHub Issues](https://github.com/Velocity-BPA/n8n-nodes-farcaster/issues)
-- **Community**: [Farcaster Channel](https://warpcast.com/~/channel/farcaster)
-
-## Acknowledgments
-
-- [Farcaster Protocol](https://www.farcaster.xyz/) - The decentralized social network
-- [Neynar](https://neynar.com) - Enhanced Farcaster API provider
-- [n8n](https://n8n.io) - Workflow automation platform
-- [@noble/ed25519](https://github.com/paulmillr/noble-ed25519) - Ed25519 cryptography
+- **Farcaster Documentation**: [docs.farcaster.xyz](https://docs.farcaster.xyz)
+- **Farcaster Developer Community**: [warpcast.com/~/channel/fc-devs](https://warpcast.com/~/channel/fc-devs)
